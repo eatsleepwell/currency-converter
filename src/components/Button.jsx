@@ -1,11 +1,17 @@
 import React from "react";
 
-const Button = ({ exchange }) => {
+const Button = ({ exchange, result, empty }) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div
+      className={`flex items-center justify-center ${
+        result !== "" && "hidden"
+      } `}
+    >
       <button
-        className="bg-white p-2 rounded-lg w-60"
-        onClick={() => exchange()}
+        className={`p-2 bg-white rounded-lg w-20 ${
+          empty && "cursor-default opacity-50 text-red-500"
+        }`}
+        onClick={() => !empty && exchange()}
       >
         Convert
       </button>
