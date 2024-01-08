@@ -1,5 +1,3 @@
-import React from "react";
-
 const Button = ({ exchange, result, empty }) => {
   return (
     <div

@@ -1,36 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
-import InputBox from "./components/InputBox";
-import Button from "./components/Button";
-import Result from "./components/Result";
+import { InputBox, Button, Result } from "./components";
+import FetchDataCurrency from "./hooks/data";
 
 const App = () => {
   const [from, setFrom] = useState("USD");
   const [to, setTo] = useState("IDR");
-  const [exchangeData, setExchangeData] = useState(null);
   const [amount, setAmount] = useState(1);
   const [result, setResult] = useState("");
   const [empty, setEmpty] = useState(false);
-  const API_KEY = `9662468b2fd04fd49f52d9e4`;
-  const URL_API = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/${from}`;
-  const URL_EXCHANGE = `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${from}/${to}/${amount}`;
 
-  const fetchData = useCallback(async () => {
-    try {
-      const response = await fetch(URL_API);
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-
-      const data = await response.json();
-      setExchangeData(data.conversion_rates);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [URL_API]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const url = import.meta.env.VITE_URL_API;
+  const URL_API = `${url}/${apiKey}/latest/${from}`;
+  const URL_EXCHANGE = `${url}/${apiKey}/pair/${from}/${to}/${amount}`;
+  const data = FetchDataCurrency({ URL_API });
 
   const exchange = useCallback(() => {
     const fetchData = async () => {
@@ -68,7 +51,7 @@ const App = () => {
         <div className="flex flex-col gap-6 p-5 rounded-xl bg-slate-300">
           <div className="flex flex-col gap-2 lg:flex-row">
             <InputBox
-              data={exchangeData}
+              data={data}
               amount={amount}
               from={from}
               to={to}
