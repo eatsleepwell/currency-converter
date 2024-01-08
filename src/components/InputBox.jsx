@@ -26,6 +26,14 @@ const InputBox = ({
     return () => clearTimeout(timerId);
   }, [inputValue, from, to]);
 
+  const handleSwap = () => {
+    [from, to] = [to, from];
+    console.log(from);
+    console.log(to);
+    setFrom(from);
+    setTo(to);
+  };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     setEmpty(value === "" || value === "0");
@@ -40,13 +48,13 @@ const InputBox = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 lg:flex-1">
         <span>Amount</span>
         <div className="p-4 bg-white rounded-lg">
           <input
             type="text"
             pattern="\d*"
-            className="w-32 w-full border-none outline-none"
+            className="w-full border-none outline-none"
             placeholder={inputValue}
             value={inputValue}
             onChange={handleInputChange}
@@ -62,12 +70,11 @@ const InputBox = ({
           <span className="text-red-500">"Please enter a valid amount"</span>
         )}
       </div>
-
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 lg:flex-1">
         <span>From</span>
         <div className="p-2 bg-white rounded-lg">
           <select
-            className="w-32 p-2 border-none outline-none"
+            className="w-full p-2 border-none outline-none"
             onChange={(e) => {
               setFrom(e.target.value);
             }}
@@ -83,12 +90,19 @@ const InputBox = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col justify-center">
+        <button
+          className={`px-5 py-2 bg-white rounded-xl w-fit lg:mt-7 lg:py-4`}
+          onClick={handleSwap}
+        >
+          Swap
+        </button>
+      </div>
+      <div className="flex flex-col gap-2 lg:flex-1">
         <span>To</span>
-
         <div className="p-2 bg-white rounded-lg ">
           <select
-            className="w-32 p-2 border-none outline-none"
+            className="w-full p-2 border-none outline-none"
             onChange={(e) => setTo(e.target.value)}
           >
             {data &&

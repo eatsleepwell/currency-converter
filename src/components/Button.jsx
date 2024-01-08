@@ -3,12 +3,10 @@ import React from "react";
 const Button = ({ exchange, result, empty }) => {
   return (
     <div
-      className={`flex items-center justify-center ${
-        result !== "" && "hidden"
-      } `}
+      className={`flex w-full h-12 justify-end ${result !== "" && "hidden"} `}
     >
       <button
-        className={`p-2 bg-white rounded-lg w-20 ${
+        className={`px-5 py-2 bg-white rounded-lg ${
           empty && "cursor-default opacity-50 text-red-500"
         }`}
         onClick={() => !empty && exchange()}
