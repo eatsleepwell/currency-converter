@@ -7,7 +7,6 @@ const InputBox = ({
   to = "IDR",
   setFrom,
   setTo,
-  format,
   exchange,
   result,
   setEmpty,
@@ -43,7 +42,9 @@ const InputBox = ({
 
   const formatted = (e) => {
     const value = e.target.value;
-    setInputValue(value === "" ? "" : format(parseFloat(e.target.value)));
+    setInputValue(
+      value === "" ? "" : parseFloat(e.target.value).toLocaleString("en-US")
+    );
   };
 
   return (

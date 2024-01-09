@@ -1,38 +1,24 @@
-import { useState, useCallback } from "react";
-
-function ExchangeCurrency({ URL_EXCHANGE }) {
-  const [result, setResult] = useState({});
-
-  const exchange = useCallback(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(URL_EXCHANGE);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-
-        setResult(
-          ` ${numberWithCommas(amount)} ${from} = ${numberWithCommas(
-            data.conversion_result
-          )} ${to} `
-        );
-      } catch (error) {
-        console.log(error);
+function ExchangeCurrency({ URL_EXCHANGE, setResult, from, to, amount }) {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(URL_EXCHANGE);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
       }
-    };
 
-    fetchData();
-  }, [URL_EXCHANGE]);
+      const data = await response.json();
 
-  const numberWithCommas = (value) => {
-    return value.toLocaleString("en-US");
+      setResult(
+        ` ${amount.toLocaleString(
+          "en-US"
+        )} ${from} = ${data.conversion_result.toLocaleString("en-US")} ${to} `
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  exchange();
-
-  return result;
+  fetchData();
 }
 
 export default ExchangeCurrency;

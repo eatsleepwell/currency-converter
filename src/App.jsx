@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { InputBox, Button, Result } from "./components";
 import FetchDataCurrency from "./hooks/data";
+import ExchangeCurrency from "./hooks/exchange";
 
 const App = () => {
   const [from, setFrom] = useState("USD");
@@ -13,34 +14,8 @@ const App = () => {
   const url = import.meta.env.VITE_URL_API;
   const URL_API = `${url}/${apiKey}/latest/${from}`;
   const URL_EXCHANGE = `${url}/${apiKey}/pair/${from}/${to}/${amount}`;
+
   const data = FetchDataCurrency({ URL_API });
-
-  const exchange = useCallback(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(URL_EXCHANGE);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-
-        setResult(
-          ` ${numberWithCommas(amount)} ${from} = ${numberWithCommas(
-            data.conversion_result
-          )} ${to} `
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [URL_EXCHANGE]);
-
-  const numberWithCommas = (value) => {
-    return value.toLocaleString("en-US");
-  };
 
   return (
     <div className="flex flex-col flex-wrap items-center justify-center w-full h-screen gap-5 bg-slate-200">
@@ -58,15 +33,22 @@ const App = () => {
               setAmount={setAmount}
               setFrom={setFrom}
               setTo={setTo}
-              format={numberWithCommas}
-              exchange={exchange}
+              exchange={() => {
+                ExchangeCurrency({ URL_EXCHANGE, setResult, from, to, amount });
+              }}
               result={result}
               setEmpty={setEmpty}
             />
           </div>
           <div className="flex">
             <Result result={result} />
-            <Button exchange={exchange} result={result} empty={empty} />
+            <Button
+              exchange={() => {
+                ExchangeCurrency({ URL_EXCHANGE, setResult, from, to, amount });
+              }}
+              result={result}
+              empty={empty}
+            />
           </div>
         </div>
       </div>
